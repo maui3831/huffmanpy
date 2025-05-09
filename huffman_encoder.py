@@ -100,7 +100,7 @@ def build_huffman_tree(text, frequency, verbose=False):
 
 def _generate_huffman_codes_recursive(
     root_node, current_code, codes_dict, verbose=False
-):  # Renamed to indicate it's an internal helper
+):
     """
     Recursively traverses the Huffman tree to generate codes for each character.
     (Internal helper function)
@@ -167,8 +167,7 @@ def get_huffman_codes(root_node, verbose=False):
         return codes
 
     _generate_huffman_codes_recursive(root_node, "", codes, verbose)
-    if verbose:
-        print("VERBOSE: ---------------------------------")
+    print("VERBOSE: ---------------------------------") if verbose else None
     return codes
 
 

@@ -1,4 +1,3 @@
-# huffman_project/main.py
 import argparse
 from collections import Counter
 from rich import print
@@ -76,9 +75,7 @@ def main():
                         )
                 else:
                     print("[yellow]Visualization was not generated.[/yellow]")
-            except (
-                Exception
-            ) as e:  # Catch any unexpected errors during visualization call
+            except Exception as e:
                 print(f"[bold red]Error during visualization process:[/bold red] {e}")
 
         # 2. Generate Huffman Codes

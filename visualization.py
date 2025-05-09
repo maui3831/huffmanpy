@@ -100,8 +100,6 @@ def visualize_huffman_tree(
     add_nodes_edges(root_node)
 
     try:
-        # Graphviz render automatically adds the format extension
-        # It expects filename without extension for the 'filename' argument
         rendered_path = dot.render(
             filename=str(output_file_path.name),
             directory=str(output_file_path.parent),

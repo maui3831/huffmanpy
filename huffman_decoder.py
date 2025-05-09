@@ -21,7 +21,7 @@ def huffman_decode(encoded_text, huffman_tree_root, verbose=False):
     if verbose:
         print("\nVERBOSE: ---- Decoding Text ----")
 
-    decoded_chars = []  # Use list.join for efficiency
+    decoded_chars = []
     current_node = huffman_tree_root
 
     if (
@@ -42,7 +42,7 @@ def huffman_decode(encoded_text, huffman_tree_root, verbose=False):
     for i, bit in enumerate(encoded_text):
         if bit == "0":
             current_node = current_node.left
-            if verbose and i < 20:  # Limit verbose output for long strings
+            if verbose and i < 20:
                 print(
                     f"VERBOSE: Bit '{bit}' -> Traversing Left. Current node: {current_node}"
                 )
