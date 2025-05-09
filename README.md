@@ -22,40 +22,40 @@ This project is an implementation of the Huffman coding algorithm in Python. Huf
 
 This implementation demonstrates the core steps of the Huffman algorithm:
 
-* Calculating character frequencies.
-* Building a Huffman tree (a binary tree where leaves are characters and their frequencies).
-* Generating Huffman codes by traversing the tree.
-* Encoding an input string using the generated codes.
-* Decoding the encoded string back to the original.
+- Calculating character frequencies.
+- Building a Huffman tree (a binary tree where leaves are characters and their frequencies).
+- Generating Huffman codes by traversing the tree.
+- Encoding an input string using the generated codes.
+- Decoding the encoded string back to the original.
 
 ## 2. How the Code Works
 
 The Python script (`main.py`) is structured as follows:
 
-* **`Node` Class:** Represents a node in the Huffman tree. Each node stores its character (for leaf nodes), frequency, and references to its left and right children.
-* **`build_huffman_tree(text, verbose=False)`:**
+- **`Node` Class:** Represents a node in the Huffman tree. Each node stores its character (for leaf nodes), frequency, and references to its left and right children.
+- **`build_huffman_tree(text, verbose=False)`:**
   1. Calculates the frequency of each character in the input `text`.
   2. Creates a leaf `Node` for each character and adds it to a min-priority queue (implemented using `heapq`).
   3. Iteratively extracts the two nodes with the minimum frequencies from the priority queue.
   4. Creates a new internal node with these two nodes as children and a frequency equal to the sum of their frequencies.
   5. Adds this new internal node back to the priority queue.
   6. This process continues until only one node (the root of the Huffman tree) remains in the queue.
-* **`generate_huffman_codes_recursive(root_node, current_code, codes_dict, verbose=False)`:**
-  * Recursively traverses the Huffman tree from the `root_node`.
-  * Appends '0' to the `current_code` when moving to a left child and '1' when moving to a right child.
-  * When a leaf node (character) is reached, the accumulated `current_code` is stored in the `codes_dict` for that character.
-* **`get_huffman_codes(root_node, verbose=False)`:**
-  * Initializes an empty dictionary for codes.
-  * Calls `generate_huffman_codes_recursive` to populate the codes dictionary.
-  * Handles a special case for single-node trees (e.g., input "aaa").
-* **`huffman_encode(text, huffman_codes, verbose=False)`:**
-  * Iterates through the input `text`.
-  * Appends the Huffman code for each character (from `huffman_codes`) to create the `encoded_text`.
-* **`huffman_decode(encoded_text, huffman_tree_root, verbose=False)`:**
-  * Traverses the `huffman_tree_root` based on the bits in the `encoded_text`.
-  * Moves left for a '0' and right for a '1'.
-  * When a leaf node is reached, its character is appended to the `decoded_text`, and traversal restarts from the root for the next character.
-* **Main Execution (`if __name__ == "__main__":`)**
+- **`generate_huffman_codes_recursive(root_node, current_code, codes_dict, verbose=False)`:**
+  - Recursively traverses the Huffman tree from the `root_node`.
+  - Appends '0' to the `current_code` when moving to a left child and '1' when moving to a right child.
+  - When a leaf node (character) is reached, the accumulated `current_code` is stored in the `codes_dict` for that character.
+- **`get_huffman_codes(root_node, verbose=False)`:**
+  - Initializes an empty dictionary for codes.
+  - Calls `generate_huffman_codes_recursive` to populate the codes dictionary.
+  - Handles a special case for single-node trees (e.g., input "aaa").
+- **`huffman_encode(text, huffman_codes, verbose=False)`:**
+  - Iterates through the input `text`.
+  - Appends the Huffman code for each character (from `huffman_codes`) to create the `encoded_text`.
+- **`huffman_decode(encoded_text, huffman_tree_root, verbose=False)`:**
+  - Traverses the `huffman_tree_root` based on the bits in the `encoded_text`.
+  - Moves left for a '0' and right for a '1'.
+  - When a leaf node is reached, its character is appended to the `decoded_text`, and traversal restarts from the root for the next character.
+- **Main Execution (`if __name__ == "__main__":`)**
   1. Prompts the user to enter a string.
   2. Builds the Huffman tree.
   3. Generates Huffman codes.
@@ -66,7 +66,7 @@ The Python script (`main.py`) is structured as follows:
 
 ## 3. Requirements
 
-* Python 3.x
+- Python 3.x
 
 No external libraries beyond standard Python modules (`heapq`, `collections.Counter`, `argparse`) are required.
 
@@ -95,41 +95,46 @@ python main.py -v
 ## 5. Example Output
 
 ```txt
-Enter the string to encode: BCAADDDCCACACAC
-
-Original Text: "BCAADDDCCACACAC"
+Original Text: "BANANA BANDANA"
 
 --- Huffman Codes ---
-  Character: 'A', Code: 10
-  Character: 'B', Code: 1110
-  Character: 'C', Code: 0
-  Character: 'D', Code: 110
+  Character: ' ', Frequency: 1, Code: 1111
+  Character: 'A', Frequency: 6, Code: 0
+  Character: 'B', Frequency: 2, Code: 110
+  Character: 'D', Frequency: 1, Code: 1110
+  Character: 'N', Frequency: 4, Code: 10
 ---------------------
 
-Encoded Text: 11100101011011011000100100100
+Encoded Text: 1100100100111111001011100100
 
 --- Compression Statistics ---
-  Original length (ASCII, 8 bits/char): 120 bits
-  Encoded length (Huffman):             30 bits
-  Space saved:                          90 bits
+  Original length (ASCII, 8 bits/char): 112 bits
+  Encoded length (Huffman):             28 bits
+  Space saved:                          84 bits
   Compression ratio:                    75.00%
 -----------------------------
 
-Decoded Text: "BCAADDDCCACACAC"
+Decoded Text: "BANANA BANDANA"
 
 SUCCESS: Encoding and Decoding successful! Original text matches decoded text.
 ```
 
+Huffman tree for the example above:
+![BANANA BANDANA Huffman Tree](<docs/assets/BANANA BANDANA.svg>)
+
 ## 6. Features
 
-* **Character Frequency Calculation:** Uses `collections.Counter` for efficient frequency counting.
-* **Min-Priority Queue:** Employs `heapq` for managing nodes during tree construction.
-* **Huffman Tree Construction:** Dynamically builds the optimal prefix code tree.
-* **Encoding:** Converts input text to its Huffman-coded binary string.
-* **Decoding:** Reconstructs the original text from the Huffman-coded string and the tree.
-* **Compression Statistics:** Calculates and displays the original size, encoded size, space saved, and compression ratio.
-* **Verbose Mode:** Provides detailed output for each step of the algorithm, useful for understanding and debugging.
-* **Handles Single Character/Single Node Trees:** Correctly encodes and decodes strings with only one unique character (e.g., "aaaaa") or very short strings.
+- **Character Frequency Calculation:** Uses `collections.Counter` for efficient frequency counting.
+- **Min-Priority Queue:** Employs `heapq` for managing nodes during tree construction.
+- **Huffman Tree Construction:** Dynamically builds the optimal prefix code tree.
+- **Encoding:** Converts input text to its Huffman-coded binary string.
+- **Decoding:** Reconstructs the original text from the Huffman-coded string and the tree.
+- **Compression Statistics:** Calculates and displays the original size, encoded size, space saved, and compression ratio.
+- **Verbose Mode:** Provides detailed output for each step of the algorithm, useful for understanding and debugging.
+- **Tree Visualization:** Generates a visual representation of the Huffman tree using Graphviz.
+- **Custom Output Path:** Allows specifying a custom path for saving the visualization.
+- **Visualization Format Selection:** Supports different output formats for the visualization (e.g., png, pdf, svg).
+- **Handles Single Character/Single Node Trees:** Correctly encodes and decodes strings with only one unique character (e.g., "aaaaa") or very short strings.
 
 ## 7. Conclusion
 
