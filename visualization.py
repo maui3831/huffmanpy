@@ -1,6 +1,5 @@
 from pathlib import Path
 import re
-import datetime
 from rich import print
 
 
@@ -36,6 +35,36 @@ def visualize_huffman_tree(
     if root_node is None:
         return None
 
+    # Check if output_file is provided
+    if output_file is None:
+        vis_dir = Path.cwd() / "huffman_visualizations"
+        vis_dir.mkdir(parents=True, exist_ok=True)
+
+        if input_text:
+            clean_text = re.sub(r'[\\/*?:"<>|]', "_", input_text)
+            if len(clean_text) > 30:
+                clean_text = clean_text[:27] + "..."
+        else:
+            clean_text = "huffman_tree"
+
+        filename_base = clean_text
+        output_file_path = vis_dir / filename_base
+
+        # Check if a visualization for this input already exists
+        existing_file = list(vis_dir.glob(f"{filename_base}.{format}"))
+        if existing_file:
+            existing_path = str(existing_file[0])
+            print(f"[green]Reusing existing visualization:[/green] {existing_path}")
+            if view:
+                import os
+
+                os.startfile(existing_path) if os.name == "nt" else print(
+                    f"[yellow]Cannot automatically open file on this OS. File is at: {existing_path}[/yellow]"
+                )
+            return existing_path
+    else:
+        output_file_path = Path(output_file)
+
     dot = Digraph(comment="Huffman Tree", format=format)
     dot.attr(rankdir="TB")
 
@@ -68,24 +97,6 @@ def visualize_huffman_tree(
         add_nodes_edges(node.right, (current_id, "R"))
 
     add_nodes_edges(root_node)
-
-    if output_file is None:
-        vis_dir = Path.cwd() / "huffman_visualizations"
-        vis_dir.mkdir(parents=True, exist_ok=True)
-
-        if input_text:
-            clean_text = re.sub(r'[\\/*?:"<>|]', "_", input_text)
-            if len(clean_text) > 30:
-                clean_text = clean_text[:27] + "..."
-        else:
-            clean_text = "huffman_tree"
-
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename_base = f"{clean_text}_{timestamp}"
-        # output_file will be filename_base, graphviz adds the extension
-        output_file_path = vis_dir / filename_base
-    else:
-        output_file_path = Path(output_file)
 
     try:
         # Graphviz render automatically adds the format extension
