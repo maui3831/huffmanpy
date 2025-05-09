@@ -20,12 +20,10 @@ class Node:
         self.right = None
 
     # Define comparison methods for the priority queue (min-heap)
-    # Nodes will be ordered by their frequency.
     def __lt__(self, other):
         if other is None:
-            return False  # Or raise an error, depending on desired behavior
+            return False  
         if not isinstance(other, Node):
-            # Allow comparison with other types if necessary, or raise TypeError
             return NotImplemented
         return self.freq < other.freq
 
@@ -66,19 +64,16 @@ def build_huffman_tree(text, verbose=False):
 
     # 2. Create a leaf node for each character and add it to a min-priority queue
     priority_queue = [Node(char, freq) for char, freq in frequency.items()]
-    heapq.heapify(priority_queue)  # Transform list into a min-heap
+    heapq.heapify(priority_queue)  
 
     if verbose:
         print("\nVERBOSE: ---- Initial Priority Queue (Min-Heap) ----")
-        # heapq.nsmallest provides a sorted view without altering the heap
         for node in heapq.nsmallest(len(priority_queue), priority_queue):
             print(f"VERBOSE: {node}")
         print("VERBOSE: ------------------------------------------")
 
     # 3. Build the tree
-    # While there is more than one node in the queue
     while len(priority_queue) > 1:
-        # Extract the two nodes with the minimum frequency
         left_child = heapq.heappop(priority_queue)
         right_child = heapq.heappop(priority_queue)
 
@@ -88,9 +83,7 @@ def build_huffman_tree(text, verbose=False):
             print(f"VERBOSE: Popped Right Child: {right_child}")
 
         # Create a new internal node with these two nodes as children
-        # and frequency as the sum of the children's frequencies.
         merged_freq = left_child.freq + right_child.freq
-        # Internal nodes don't have a specific char, using a placeholder if needed for __repr__
         internal_node = Node(None, merged_freq)
         internal_node.left = left_child
         internal_node.right = right_child
@@ -134,10 +127,9 @@ def generate_huffman_codes_recursive(
     if root_node is None:
         return
 
-    # If it's a leaf node, it contains a character.
     # Store the current code for this character.
     if root_node.char is not None:
-        final_code = current_code if current_code else "0"  # Handle single node tree
+        final_code = current_code if current_code else "0"  
         codes_dict[root_node.char] = final_code
         if verbose:
             print(
@@ -225,7 +217,7 @@ def huffman_encode(text, huffman_codes, verbose=False):
             # This should not happen if the tree was built from the text
             raise ValueError(f"Character '{char}' not found in Huffman codes.")
         encoded_text += code
-        if verbose and i < 5:  # Print for first few characters to avoid too much log
+        if verbose and i < 5:  
             print(
                 f"VERBOSE: Encoding '{char}' to '{code}'. Current encoded: ...{encoded_text[-20:]}"
             )
@@ -266,7 +258,7 @@ def huffman_decode(encoded_text, huffman_tree_root, verbose=False):
         and current_node.left is None
         and current_node.right is None
     ):
-        if all(bit == "0" for bit in encoded_text):  # All bits must be '0'
+        if all(bit == "0" for bit in encoded_text): 
             decoded_string = current_node.char * len(encoded_text)
             if verbose:
                 print(
@@ -292,7 +284,7 @@ def huffman_decode(encoded_text, huffman_tree_root, verbose=False):
         else:
             raise ValueError(f"Invalid bit '{bit}' in encoded string.")
 
-        if current_node is None:  # Should not happen with a valid Huffman tree and code
+        if current_node is None: 
             raise ValueError("Invalid path in Huffman tree during decoding.")
 
         if current_node.char is not None:  # Reached a leaf node
@@ -301,7 +293,7 @@ def huffman_decode(encoded_text, huffman_tree_root, verbose=False):
                 print(
                     f"VERBOSE: Found character '{current_node.char}'. Resetting to root."
                 )
-            current_node = huffman_tree_root  # Reset to root for the next character
+            current_node = huffman_tree_root  
 
     final_decoded_string = "".join(decoded_text)
     if verbose:
@@ -494,10 +486,7 @@ if __name__ == "__main__":
             for char_code_pair in sorted(
                 huffman_codes.items()
             ):  # Sort for consistent output
-                char = char_code_pair[0]
-                code = char_code_pair[1]
-                freq = char_frequencies[char]
-                print(f"  Character: '{char}', Frequency: {freq}, Code: {code}")
+                print(f"  Character: '{char_code_pair[0]}', Code: {char_code_pair[1]}")
             print("---------------------")
 
             # 3. Encode the text
@@ -506,7 +495,7 @@ if __name__ == "__main__":
 
             original_length_bits = (
                 len(input_text) * 8
-            )  # Assuming 8 bits per character (e.g., ASCII)
+            )  
             encoded_length_bits = len(encoded_text)
 
             print("\n--- Compression Statistics ---")
@@ -544,6 +533,3 @@ if __name__ == "__main__":
                 "Could not build Huffman tree (e.g., empty input text or other error)."
             )
 
-    # Example of how to run from command line:
-    # python your_script_name.py
-    # python your_script_name.py --verbose
