@@ -1,7 +1,20 @@
 # Huffman Coding Implementation in Python
 
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+[![Python](https://img.shields.io/badge/python-3.x-blue.svg)](https://www.python.org/)
+
 For Introduction to Artificial Intelligence
 by AI Group 2
+
+- [Huffman Coding Implementation in Python](#huffman-coding-implementation-in-python)
+  - [1. Introduction](#1-introduction)
+  - [2. How the Code Works](#2-how-the-code-works)
+  - [3. Requirements](#3-requirements)
+  - [4. How to Run](#4-how-to-run)
+    - [Verbose Mode](#verbose-mode)
+  - [5. Example Output](#5-example-output)
+  - [6. Features](#6-features)
+  - [7. Conclusion](#7-conclusion)
 
 ## 1. Introduction
 
