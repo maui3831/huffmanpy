@@ -67,8 +67,12 @@ The Python script (`main.py`) is structured as follows:
 ## 3. Requirements
 
 - Python 3.x
+- `rich` (for styled terminal output): `pip install rich`
+- `graphviz` (optional, for tree visualization):
+  - Python library: `pip install graphviz`
+  - Graphviz software: [https://graphviz.org/download/](https://graphviz.org/download/)
 
-No external libraries beyond standard Python modules (`heapq`, `collections.Counter`, `argparse`) are required.
+No external libraries beyond standard Python modules (`heapq`, `collections.Counter`, `argparse`, `re`, `pathlib.Path`) are strictly required for the core Huffman encoding/decoding logic. `rich` enhances the display, and `graphviz` is needed only if you use the `--visualize` option.
 
 ## 4. How to Run
 
@@ -120,6 +124,7 @@ SUCCESS: Encoding and Decoding successful! Original text matches decoded text.
 ```
 
 Huffman tree for the example above:
+
 ![BANANA BANDANA Huffman Tree](<docs/assets/BANANA BANDANA.svg>)
 
 ## 6. Features
