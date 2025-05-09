@@ -56,7 +56,6 @@ def visualize_huffman_tree(
         existing_file = list(vis_dir.glob(f"{filename_base}.{format}"))
         if existing_file:
             existing_path = str(existing_file[0])
-            print(f"[green]Reusing existing visualization:[/green] {existing_path}")
             if view:
                 import os
 
