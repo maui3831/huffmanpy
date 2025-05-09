@@ -1,6 +1,9 @@
 import heapq
 from collections import Counter
 import argparse
+from pathlib import Path
+import re
+import datetime
 
 
 class Node:
@@ -309,6 +312,118 @@ def huffman_decode(encoded_text, huffman_tree_root, verbose=False):
     return final_decoded_string
 
 
+def visualize_huffman_tree(
+    root_node, view=True, output_file=None, format="png", verbose=False, input_text=None
+):
+    """
+    Visualizes the Huffman tree using Graphviz.
+
+    Args:
+        root_node (Node): The root node of the Huffman tree.
+        view (bool): If True, opens the generated graph image.
+        output_file (str, optional): Path where the visualization should be saved.
+                                     If None, a file will be created in the visualization folder.
+        format (str): The format of the output file (png, pdf, etc.)
+        verbose (bool): If True, prints detailed steps.
+        input_text (str, optional): Original input text to use for the filename.
+
+    Returns:
+        str: The path to the created visualization file.
+    """
+    try:
+        from graphviz import Digraph
+    except ImportError:
+        print("Error: The graphviz package is required for tree visualization.")
+        print("Install it using: pip install graphviz")
+        print(
+            "You may also need to install the Graphviz software: https://graphviz.org/download/"
+        )
+        return None
+
+    if root_node is None:
+        if verbose:
+            print("VERBOSE: Root node is None. Cannot visualize tree.")
+        return None
+
+    if verbose:
+        print("\nVERBOSE: ---- Visualizing Huffman Tree ----")
+
+    # Create a new directed graph
+    dot = Digraph(comment="Huffman Tree", format=format)
+    dot.attr(rankdir="TB")  # Top to bottom layout
+
+    # Counter for unique node IDs
+    node_counter = [0]
+
+    def add_nodes_edges(node, parent_id=None):
+        if node is None:
+            return
+
+        # Create a unique ID for this node
+        current_id = str(node_counter[0])
+        node_counter[0] += 1
+
+        # Prepare label text
+        if node.char is not None:
+            # For leaf nodes, show character and frequency
+            char_repr = (
+                node.char if node.char.isprintable() else f"ASCII({ord(node.char)})"
+            )
+            label = f"'{char_repr}': {node.freq}"
+        else:
+            # For internal nodes, just show frequency
+            label = f"freq={node.freq}"
+
+        # Add the node to the graph
+        shape = "box" if node.char is not None else "ellipse"  # Make leaf nodes boxes
+        dot.node(current_id, label, shape=shape)
+
+        # If this is not the root, connect it to its parent
+        if parent_id is not None:
+            # Label the edge with 0 for left child, 1 for right child
+            edge_label = "0" if parent_id[1] == "L" else "1"
+            dot.edge(parent_id[0], current_id, label=edge_label)
+
+        # Recursively add children
+        add_nodes_edges(node.left, (current_id, "L"))
+        add_nodes_edges(node.right, (current_id, "R"))
+
+    # Start building the graph from the root
+    add_nodes_edges(root_node)
+
+    # Determine the output file path
+    if output_file is None:
+        # Create visualization directory if it doesn't exist
+        vis_dir = Path.cwd() / "huffman_visualizations"
+        vis_dir.mkdir(parents=True, exist_ok=True)
+
+        # Generate filename from input text if provided
+        if input_text:
+            # Clean and truncate the input text for a valid filename
+            # Remove invalid filename characters and replace with underscore
+            clean_text = re.sub(r'[\\/*?:"<>|]', "_", input_text)
+            # Truncate if too long (max 30 chars)
+            if len(clean_text) > 30:
+                clean_text = clean_text[:27] + "..."
+        else:
+            clean_text = "huffman_tree"
+
+        # Add timestamp for uniqueness
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{clean_text}_{timestamp}"
+
+        output_file = str(vis_dir / filename)
+
+    # Render the graph to file
+    output_path = dot.render(filename=output_file, view=view, cleanup=True)
+
+    if verbose:
+        print(f"VERBOSE: Tree visualization saved to {output_path}")
+        print("VERBOSE: --------------------------------------")
+
+    return output_path
+
+
 # --- Main Execution ---
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -320,9 +435,25 @@ if __name__ == "__main__":
         action="store_true",
         help="Enable verbose output for debugging.",
     )
+    parser.add_argument(
+        "--visualize",
+        action="store_true",
+        help="Visualize the Huffman tree (requires graphviz).",
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        help="Path where to save the tree visualization.",
+        default=None,
+    )
+    parser.add_argument(
+        "--format",
+        type=str,
+        choices=["png", "pdf", "svg", "jpg"],
+        default="png",
+        help="Format of the visualization output file.",
+    )
     # We will get the input string via input() prompt, not as a command-line argument here.
-    # If you prefer it as a command-line argument, you could add:
-    # parser.add_argument("text", type=str, help="The text string to encode.")
     args = parser.parse_args()
 
     input_text = input("Enter the string to encode: ")
@@ -338,6 +469,21 @@ if __name__ == "__main__":
         huffman_tree_root = build_huffman_tree(input_text, args.verbose)
 
         if huffman_tree_root:
+            # Visualize the tree if requested
+            if args.visualize:
+                try:
+                    output_path = visualize_huffman_tree(
+                        huffman_tree_root,
+                        output_file=args.output,
+                        format=args.format,
+                        verbose=args.verbose,
+                        input_text=input_text,  # Pass the input_text for filename generation
+                    )
+                    if output_path:
+                        print(f"\nHuffman tree visualization saved to: {output_path}")
+                except Exception as e:
+                    print(f"Error visualizing Huffman tree: {e}")
+
             # 2. Generate Huffman Codes
             huffman_codes = get_huffman_codes(huffman_tree_root, args.verbose)
 
