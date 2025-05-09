@@ -60,21 +60,21 @@ if st.button("Run Huffman Coding", use_container_width=True):
             decoded = huffman_decode(encoded, root, verbose=False)
 
         if text == decoded:
-            verification_placeholder.success("✓ Verified: Decoding Matches Original")
+            verification_placeholder.success("✓ SUCCESS: Encoding and Decoding successful! Original text matches decoded text.")
         else:
-            verification_placeholder.error("✗ Decoding Failed!")
+            verification_placeholder.error("✗ FAILED: Decoding failed! Original text does NOT match decoded text.")
 
         # Main output panels
         col1, col2 = st.columns([1, 2], gap="large")
         
         with col1:  # Left panel for Text outputs
             with st.container():
-                st.subheader("Original Text")
-                st.write(f'```\n{text[:200]}{"..." if len(text) > 200 else ""}\n```')
-                
-            with st.container():
                 st.subheader("Encoded Text")
                 st.code(encoded)
+
+            with st.container():
+                st.subheader("Decoded Text")
+                st.write(f'```\n{text[:200]}{"..." if len(text) > 200 else ""}\n```')
 
         with col2:  # Right panel Visual outputs
             if visualize and root:
@@ -89,8 +89,8 @@ if st.button("Run Huffman Coding", use_container_width=True):
             with st.container():
                 st.subheader("Huffman Codes")
                 codes_df = pd.DataFrame(
-                    [(k, repr(str(k)), v) for k, v in codes.items()],
-                    columns=["ASCII", "Character", "Code"]
+                   [(repr(str(k)), frequency[k], v) for k, v in codes.items()],
+                    columns=["Character", "Frequency", "Code"]
                 )
                 st.dataframe(codes_df, height=300, hide_index=True)
 
