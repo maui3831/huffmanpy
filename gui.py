@@ -19,7 +19,6 @@ with st.sidebar:
     st.header("Controls")
     input_method = st.radio("Input Method:", ("Text Input", "File Upload"))
     verbose = st.radio("Verbose Mode:", ("Off", "On"), horizontal=True)
-    visualize = st.checkbox("Visualize Tree")
 
 verification_placeholder = st.empty()
 
@@ -65,7 +64,7 @@ if st.button("Run Huffman Coding", use_container_width=True):
             verification_placeholder.error("✗ FAILED: Decoding failed! Original text does NOT match decoded text.")
 
         # Main output panels
-        col1, col2 = st.columns([1, 2], gap="large")
+        col1, col2 = st.columns([1, 1], gap="large")
         
         with col1:  # Left panel for Text outputs
             with st.container():
@@ -77,22 +76,32 @@ if st.button("Run Huffman Coding", use_container_width=True):
                 st.write(f'```\n{text[:200]}{"..." if len(text) > 200 else ""}\n```')
 
         with col2:  # Right panel Visual outputs
-            if visualize and root:
-                try:
-                    with st.container():
-                        st.subheader("Huffman Tree Visualization")
-                        img_path = visualize_huffman_tree(root, view=False, input_text=text)
-                        st.image(img_path, use_column_width=True)
-                except Exception as e:
-                    st.error(f"Visualization Error: {str(e)}")
+            try:
+                with st.container():
+                    st.subheader("Huffman Tree Visualization")
+                    # Get both path and reuse status (explicitly set format)
+                    img_path, is_reused = visualize_huffman_tree(
+                        root, 
+                        view=False, 
+                        input_text=text,
+                        format="png"  # Explicitly enforce PNG format
+                    )
+                    
+                    if img_path:  # Check if path exists
+                        st.image(img_path, use_container_width=True)
+                    else:
+                        st.warning("Tree visualization could not be generated")
+            except Exception as e:
+                st.error(f"Visualization Error: {str(e)}")
+
             
-            with st.container():
-                st.subheader("Huffman Codes")
-                codes_df = pd.DataFrame(
-                   [(repr(str(k)), frequency[k], v) for k, v in codes.items()],
-                    columns=["Character", "Frequency", "Code"]
-                )
-                st.dataframe(codes_df, height=300, hide_index=True)
+        with st.container():
+            st.subheader("Huffman Codes")
+            codes_df = pd.DataFrame(
+            [(repr(str(k)), frequency[k], v) for k, v in codes.items()],
+                columns=["Character", "Frequency", "Code"]
+            )
+            st.dataframe(codes_df, height=300, hide_index=True)
 
         # Bottom panel - Stats and verbose
         with st.container():
