@@ -1,5 +1,4 @@
 import heapq
-from collections import Counter
 from rich import print
 
 
@@ -34,12 +33,13 @@ class Node:
         return f"Node(char='{self.char}', freq={self.freq})"
 
 
-def build_huffman_tree(text, verbose=False):
+def build_huffman_tree(text, frequency, verbose=False):
     """
     Builds the Huffman tree for the given text.
 
     Args:
         text (str): The input string to be encoded.
+        frequency (Counter): A Counter object with character frequencies.
         verbose (bool): If True, prints detailed steps.
 
     Returns:
@@ -50,7 +50,6 @@ def build_huffman_tree(text, verbose=False):
             print("VERBOSE: Input text is empty. Cannot build Huffman tree.")
         return None
 
-    frequency = Counter(text)
     if verbose:
         print("\nVERBOSE: ---- Character Frequencies ----")
         for char, freq in sorted(frequency.items()):

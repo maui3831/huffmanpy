@@ -1,5 +1,6 @@
 # huffman_project/main.py
 import argparse
+from collections import Counter
 from rich import print
 
 from huffman_encoder import build_huffman_tree, get_huffman_codes, huffman_encode
@@ -43,12 +44,14 @@ def main():
         print("[yellow]Input text is empty. Exiting.[/yellow]")
         return
 
+    frequency = Counter(input_text)
+
     print(f'\n[bold magenta]Original Text:[/bold magenta] "{input_text}"')
     if args.verbose:
         print("[cyan]VERBOSE mode enabled.[/cyan]")
 
     # 1. Build Huffman Tree
-    huffman_tree_root = build_huffman_tree(input_text, args.verbose)
+    huffman_tree_root = build_huffman_tree(input_text, frequency, args.verbose)
 
     if huffman_tree_root:
         # Visualize the tree if requested
@@ -85,7 +88,9 @@ def main():
         if huffman_codes:
             for char, code in sorted(huffman_codes.items()):
                 char_display = char if char.isprintable() else f"ASCII({ord(char)})"
-                print(f"  Character: '{char_display}', Code: {code}")
+                print(
+                    f"  Character: '{char_display}', Frequency: {frequency[char]}, Code: {code}"
+                )
         else:
             print("  No Huffman codes generated (e.g. empty tree).")
         print("[bold blue]---------------------[/bold blue]")
