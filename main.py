@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 import re
 import datetime
+from rich import print
 
 
 class Node:
