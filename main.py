@@ -465,6 +465,9 @@ if __name__ == "__main__":
         if args.verbose:
             print("VERBOSE mode enabled.")
 
+        # Calculate character frequencies for display
+        char_frequencies = Counter(input_text)
+
         # 1. Build Huffman Tree
         huffman_tree_root = build_huffman_tree(input_text, args.verbose)
 
@@ -491,7 +494,10 @@ if __name__ == "__main__":
             for char_code_pair in sorted(
                 huffman_codes.items()
             ):  # Sort for consistent output
-                print(f"  Character: '{char_code_pair[0]}', Code: {char_code_pair[1]}")
+                char = char_code_pair[0]
+                code = char_code_pair[1]
+                freq = char_frequencies[char]
+                print(f"  Character: '{char}', Frequency: {freq}, Code: {code}")
             print("---------------------")
 
             # 3. Encode the text
