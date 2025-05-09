@@ -18,7 +18,9 @@ def visualize_huffman_tree(
         input_text (str, optional): Original input text to use for the filename.
 
     Returns:
-        str: The path to the created visualization file, or None on error.
+        tuple: (path_to_file, is_reused) where:
+               - path_to_file is the path to the visualization file, or None on error
+               - is_reused is a boolean indicating if an existing file was reused
     """
     try:
         from graphviz import Digraph
@@ -30,10 +32,10 @@ def visualize_huffman_tree(
         print(
             "You may also need to install the Graphviz software: [blue]https://graphviz.org/download/[/blue]"
         )
-        return None
+        return None, False
 
     if root_node is None:
-        return None
+        return None, False
 
     # Check if output_file is provided
     if output_file is None:
@@ -61,7 +63,7 @@ def visualize_huffman_tree(
                 os.startfile(existing_path) if os.name == "nt" else print(
                     f"[yellow]Cannot automatically open file on this OS. File is at: {existing_path}[/yellow]"
                 )
-            return existing_path
+            return existing_path, True
     else:
         output_file_path = Path(output_file)
 
@@ -108,7 +110,7 @@ def visualize_huffman_tree(
             cleanup=True,
             format=format,
         )
-        return rendered_path
+        return rendered_path, False
     except Exception as e:
         print(f"[bold red]Error rendering graph with Graphviz:[/bold red] {e}")
         if (
@@ -121,4 +123,4 @@ def visualize_huffman_tree(
             print(
                 "Download and install from: [blue]https://graphviz.org/download/[/blue]"
             )
-        return None
+        return None, False
