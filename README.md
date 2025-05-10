@@ -15,7 +15,7 @@ by AI Group 2
     - [Web Interface (Streamlit GUI)](#web-interface-streamlit-gui)
     - [Verbose Mode](#verbose-mode)
     - [GUI Mode](#gui-mode)
-  - [5. Example Output](#5-example-output)
+  - [5. Example Output (CLI)](#5-example-output-cli)
   - [6. Features](#6-features)
   - [7. Conclusion](#7-conclusion)
 
@@ -105,20 +105,23 @@ Run the `main.py` script:
 ```bash
 python main.py
 ```
+
 The program will prompt you to: `Enter the string to encode:`
 Type your desired string and press Enter.
 
 You can also provide the input text directly as an argument:
+
 ```bash
 python main.py "your text here"
 ```
 
 **CLI Options:**
+
 - `-v` or `--verbose`: Enable verbose output for debugging.
 - `--visualize`: Visualize the Huffman tree (requires Graphviz).
 - `--output <filename>`: Specify the filename (without extension) for the saved tree visualization.
 - `--format <format>`: Specify the format for the visualization (e.g., `png`, `svg`, `pdf`).
-- `--gui`: Launch the Streamlit web interface instead (see below).
+- `--gui` or `-g`: Launch the Streamlit web interface instead (see below).
 
 ### Web Interface (Streamlit GUI)
 
@@ -127,10 +130,13 @@ To launch the interactive web interface, run:
 ```bash
 streamlit run gui.py
 ```
+
 Alternatively, you can use the `--gui` flag with `main.py`:
+
 ```bash
 python main.py --gui
 ```
+
 This will open the Huffman Coding application in your web browser. You can then input text or upload a file to see the compression in action.
 
 ### Verbose Mode
@@ -146,19 +152,21 @@ python main.py -v
 To run interactive GUI mode, the `gui.py` file provides a graphical user interface (GUI) for the Huffman coding implementation using the Streamlit library. You can run the GUI in two ways:
 
 1. Using Streamlit:
+
     ```bash
     streamlit run gui.py
     ```
+
 2. Using the Python script with the `-g`  or `--gui` flag:
+
     ```bash
     python main.py -g
     ```
 
 After running either command, open the provided URL in your web browser to access the GUI.
 
-## 5. Example Output
+## 5. Example Output (CLI)
 
-**(CLI Output Example)**
 ```txt
 Original Text: "BANANA BANDANA"
 
