@@ -102,16 +102,44 @@ if st.button("Run Huffman Coding", use_container_width=True) or text:
         # Bottom panel - Stats and verbose
         with st.container():
             st.subheader("Compression Statistics")
-            cols = st.columns(4)
+
+            # Calculate huffman table size (overhead)
+            huffman_table_bits = 0
+            for char, code in codes.items():
+                # For each character: store character (8 bits) + code itself
+                huffman_table_bits += 8 + len(code)
+
             original_bits = len(text) * 8
             encoded_bits = len(encoded)
-            saved = original_bits - encoded_bits
-            ratio = (saved / original_bits) * 100 if original_bits else 0
+            total_compressed_bits = encoded_bits + huffman_table_bits
+            saved = original_bits - total_compressed_bits
+            ratio = (
+                (saved / original_bits) * 100 if original_bits > 0 and saved > 0 else 0
+            )
 
+            # Use 5 columns for more detailed stats
+            cols = st.columns(5)
             cols[0].metric("Original Bits", original_bits)
             cols[1].metric("Encoded Bits", encoded_bits)
-            cols[2].metric("Space Saved", saved)
-            cols[3].metric("Ratio", f"{ratio:.2f}%")
+            cols[2].metric("Table Size", huffman_table_bits)
+            cols[3].metric("Total Size", total_compressed_bits)
+            cols[4].metric("Compression Ratio", f"{ratio:.2f}%")
+
+            # Additional details in an expander
+            with st.expander("Detailed Compression Analysis"):
+                st.write(
+                    f"**Original data size:** {original_bits} bits ({len(text)} characters × 8 bits)"
+                )
+                st.write(f"**Encoded data size:** {encoded_bits} bits")
+                st.write(f"**Huffman table size:** {huffman_table_bits} bits")
+                st.write(f"**Total compressed size:** {total_compressed_bits} bits")
+                st.write(f"**Space saved:** {saved} bits")
+                st.write(f"**Compression ratio:** {ratio:.2f}%")
+
+                if total_compressed_bits > original_bits:
+                    st.warning(
+                        "⚠️ The compressed data is larger than the original data! This can happen with small inputs or when many unique characters are present."
+                    )
 
         if verbose == "On":
             with st.expander("Verbose Output", expanded=True):

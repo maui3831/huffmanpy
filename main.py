@@ -117,15 +117,25 @@ def main():
         original_length_bits = len(input_text) * 8
         encoded_length_bits = len(encoded_text)
 
+        # Calculate huffman table size (overhead)
+        huffman_table_bits = 0
+        for char, code in huffman_codes.items():
+            # For each character: store character (8 bits) + code itself
+            huffman_table_bits += 8 + len(code)
+
+        # Total size including the table
+        total_compressed_bits = encoded_length_bits + huffman_table_bits
+
         print("\n[bold blue]--- Compression Statistics ---[/bold blue]")
         print(f"  Original length (ASCII, 8 bits/char): {original_length_bits} bits")
-        print(f"  Encoded length (Huffman):             {encoded_length_bits} bits")
+        print(f"  Encoded text length:                  {encoded_length_bits} bits")
+        print(f"  Huffman table size:                   {huffman_table_bits} bits")
+        print(f"  Total compressed size:                {total_compressed_bits} bits")
         if original_length_bits > 0:
-            space_saved = original_length_bits - encoded_length_bits
+            space_saved = original_length_bits - total_compressed_bits
+            # Calculate compression ratio based on total size including table
             compression_ratio = (
-                (space_saved / original_length_bits * 100)
-                if original_length_bits > 0
-                else 0
+                (space_saved / original_length_bits * 100) if space_saved > 0 else 0
             )
             print(f"  Space saved:                          {space_saved} bits")
             print(f"  Compression ratio:                    {compression_ratio:.2f}%")
