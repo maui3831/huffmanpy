@@ -43,7 +43,7 @@ def visualize_huffman_tree(
         vis_dir.mkdir(parents=True, exist_ok=True)
 
         if input_text:
-            clean_text = re.sub(r'[\\/*?:"<>|]', "_", input_text)
+            clean_text = re.sub(r'[\\/*?:"<>|\n\r]', "_", input_text)
             if len(clean_text) > 30:
                 clean_text = clean_text[:27] + "..."
         else:

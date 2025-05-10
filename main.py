@@ -24,6 +24,13 @@ def main():
         help="Visualize the Huffman tree (requires graphviz).",
     )
     parser.add_argument(
+        "input_text_arg",
+        type=str,
+        nargs="?",
+        help="Input text to be encoded. If not provided, the program will prompt for it.",
+        default=None,
+    )
+    parser.add_argument(
         "--output",
         type=str,
         help="Path (filename without extension) where to save the tree visualization. Directory will be created if it doesn't exist.",
