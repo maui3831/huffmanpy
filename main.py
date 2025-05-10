@@ -1,4 +1,5 @@
 import argparse
+import subprocess
 from collections import Counter
 from rich import print
 
@@ -42,12 +43,24 @@ def main():
         default="png",
         help="Format of the visualization output file.",
     )
+    parser.add_argument(
+        "-g",
+        "--gui",
+        action="store_true",
+        help="Launch the Streamlit web interface instead of CLI mode",
+    )
+
     args = parser.parse_args()
 
-    if args.input_text_arg:
-        input_text = args.input_text_arg
-    else:
-        input_text = input("Enter the string to encode: ")
+    # streamlit gui
+    if args.gui:
+        try:
+            subprocess.run(["streamlit", "run", "gui.py"])
+        except Exception as e:
+            print(f"[bold red]Error launching GUI:[/bold red] {e}")
+        return
+
+    input_text = input("Enter the string to encode: ")
 
     if not input_text:
         print("[yellow]Input text is empty. Exiting.[/yellow]")
