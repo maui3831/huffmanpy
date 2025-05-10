@@ -12,6 +12,7 @@ by AI Group 2
   - [3. Requirements](#3-requirements)
   - [4. How to Run](#4-how-to-run)
     - [Verbose Mode](#verbose-mode)
+    - [GUI Mode](#gui-mode)
   - [5. Example Output](#5-example-output)
   - [6. Features](#6-features)
   - [7. Conclusion](#7-conclusion)
@@ -62,7 +63,8 @@ The Python script (`main.py`) is structured as follows:
   4. Encodes the input string.
   5. Prints the original text, Huffman codes, encoded text, and compression statistics.
   6. Decodes the encoded text to verify the process.
-  7. Includes an optional `--verbose` or `-v` command-line argument to display detailed steps of the algorithm.
+  7. Includes an optional `--verbose` or `-v` command-line argument to display detailed steps of the algorithm OR  `--gui` or`-g` to run in the interactive graphical user mode in browser .
+-
 
 ## 3. Requirements
 
@@ -95,6 +97,21 @@ To see a detailed step-by-step execution of the algorithm, run the script with t
 ```bash
 python main.py -v
 ```
+
+### GUI Mode
+
+To run interactive GUI mode, the `gui.py` file provides a graphical user interface (GUI) for the Huffman coding implementation using the Streamlit library. You can run the GUI in two ways:
+
+1. Using Streamlit:
+    ```bash
+    streamlit run gui.py
+    ```
+2. Using the Python script with the `-g`  or `--gui` flag:
+    ```bash
+    python main.py -g
+    ```
+
+After running either command, open the provided URL in your web browser to access the GUI.
 
 ## 5. Example Output
 
