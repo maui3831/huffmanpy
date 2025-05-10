@@ -80,7 +80,7 @@ if st.button("Run Huffman Coding", use_container_width=True) or text:
                 with st.container():
                     st.subheader("Huffman Tree Visualization")
                     # Get both path and reuse status (explicitly set format)
-                    img_path, is_reused = visualize_huffman_tree(
+                    img_path = visualize_huffman_tree(
                         root, view=False, input_text=text, format="png"
                     )
 
