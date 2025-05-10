@@ -80,7 +80,7 @@ def main():
         if args.visualize:
             print("\nAttempting to visualize Huffman tree...")
             try:
-                output_path, is_reused = visualize_huffman_tree(
+                output_path = visualize_huffman_tree(
                     huffman_tree_root,
                     view=True,
                     output_file=args.output,
@@ -88,14 +88,9 @@ def main():
                     input_text=input_text,
                 )
                 if output_path:
-                    if is_reused:
-                        print(
-                            f"\n[green]Reusing existing visualization:[/green] {output_path}"
-                        )
-                    else:
-                        print(
-                            f"\n[green]Huffman tree visualization saved to:[/green] {output_path}"
-                        )
+                    print(
+                        f"\n[green]Huffman tree visualization saved to:[/green] {output_path}"
+                    )
                 else:
                     print("[yellow]Visualization was not generated.[/yellow]")
             except Exception as e:
