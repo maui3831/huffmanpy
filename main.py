@@ -44,6 +44,7 @@ def main():
         help="Format of the visualization output file.",
     )
     parser.add_argument(
+        "-g",
         "--gui",
         action="store_true",
         help="Launch the Streamlit web interface instead of CLI mode",

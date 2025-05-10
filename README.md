@@ -64,7 +64,6 @@ The Python script (`main.py`) is structured as follows:
   5. Prints the original text, Huffman codes, encoded text, and compression statistics.
   6. Decodes the encoded text to verify the process.
   7. Includes an optional `--verbose` or `-v` command-line argument to display detailed steps of the algorithm OR  `--gui` or`-g` to run in the interactive graphical user mode in browser .
--
 
 ## 3. Requirements
 
