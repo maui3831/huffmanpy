@@ -14,6 +14,7 @@ by AI Group 2
     - [Command-Line Interface (CLI)](#command-line-interface-cli)
     - [Web Interface (Streamlit GUI)](#web-interface-streamlit-gui)
     - [Verbose Mode](#verbose-mode)
+    - [GUI Mode](#gui-mode)
   - [5. Example Output](#5-example-output)
   - [6. Features](#6-features)
   - [7. Conclusion](#7-conclusion)
@@ -139,6 +140,21 @@ To see a detailed step-by-step execution of the algorithm, run the script with t
 ```bash
 python main.py -v
 ```
+
+### GUI Mode
+
+To run interactive GUI mode, the `gui.py` file provides a graphical user interface (GUI) for the Huffman coding implementation using the Streamlit library. You can run the GUI in two ways:
+
+1. Using Streamlit:
+    ```bash
+    streamlit run gui.py
+    ```
+2. Using the Python script with the `-g`  or `--gui` flag:
+    ```bash
+    python main.py -g
+    ```
+
+After running either command, open the provided URL in your web browser to access the GUI.
 
 ## 5. Example Output
 
