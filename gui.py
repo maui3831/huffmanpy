@@ -13,7 +13,6 @@ st.set_page_config(page_title="Huffman Coding", page_icon="📦")
 st.title("📦 Huffman Coding Compression")
 
 
-
 # Sidebar for controls and verification
 with st.sidebar:
     st.header("Controls")
@@ -25,7 +24,6 @@ verification_placeholder = st.empty()
 # Main content area
 text = ""
 if input_method == "Text Input":
-    
     with st.container():
         verification_placeholder.empty()
         text = st.text_area("Enter Text to Encode:", height=150)
@@ -34,12 +32,10 @@ else:
     if uploaded_file:
         text = uploaded_file.getvalue().decode("utf-8")
 
-if st.button("Run Huffman Coding", use_container_width=True):
+if st.button("Run Huffman Coding", use_container_width=True) or text:
     if not text:
         st.error("Input is empty!")
     else:
-
-        # counter
         frequency = Counter(text)
 
         # Processing
@@ -59,13 +55,17 @@ if st.button("Run Huffman Coding", use_container_width=True):
             decoded = huffman_decode(encoded, root, verbose=False)
 
         if text == decoded:
-            verification_placeholder.success("✓ SUCCESS: Encoding and Decoding successful! Original text matches decoded text.")
+            verification_placeholder.success(
+                "✓ SUCCESS: Encoding and Decoding successful! Original text matches decoded text."
+            )
         else:
-            verification_placeholder.error("✗ FAILED: Decoding failed! Original text does NOT match decoded text.")
+            verification_placeholder.error(
+                "✗ FAILED: Decoding failed! Original text does NOT match decoded text."
+            )
 
         # Main output panels
         col1, col2 = st.columns([1, 1], gap="large")
-        
+
         with col1:  # Left panel for Text outputs
             with st.container():
                 st.subheader("Encoded Text")
@@ -73,7 +73,7 @@ if st.button("Run Huffman Coding", use_container_width=True):
 
             with st.container():
                 st.subheader("Decoded Text")
-                st.write(f'```\n{text[:200]}{"..." if len(text) > 200 else ""}\n```')
+                st.write(f"```\n{text[:200]}{'...' if len(text) > 200 else ''}\n```")
 
         with col2:  # Right panel Visual outputs
             try:
@@ -81,27 +81,23 @@ if st.button("Run Huffman Coding", use_container_width=True):
                     st.subheader("Huffman Tree Visualization")
                     # Get both path and reuse status (explicitly set format)
                     img_path, is_reused = visualize_huffman_tree(
-                        root, 
-                        view=False, 
-                        input_text=text,
-                        format="png"  # Explicitly enforce PNG format
+                        root, view=False, input_text=text, format="png"
                     )
-                    
-                    if img_path:  # Check if path exists
+
+                    if img_path:
                         st.image(img_path, use_container_width=True)
                     else:
                         st.warning("Tree visualization could not be generated")
             except Exception as e:
                 st.error(f"Visualization Error: {str(e)}")
 
-            
         with st.container():
             st.subheader("Huffman Codes")
             codes_df = pd.DataFrame(
-            [(repr(str(k)), frequency[k], v) for k, v in codes.items()],
-                columns=["Character", "Frequency", "Code"]
+                [(repr(str(k)), frequency[k], v) for k, v in codes.items()],
+                columns=["Character", "Frequency", "Code"],
             )
-            st.dataframe(codes_df, height=300, hide_index=True)
+            st.dataframe(codes_df, hide_index=True)
 
         # Bottom panel - Stats and verbose
         with st.container():
@@ -111,7 +107,7 @@ if st.button("Run Huffman Coding", use_container_width=True):
             encoded_bits = len(encoded)
             saved = original_bits - encoded_bits
             ratio = (saved / original_bits) * 100 if original_bits else 0
-            
+
             cols[0].metric("Original Bits", original_bits)
             cols[1].metric("Encoded Bits", encoded_bits)
             cols[2].metric("Space Saved", saved)
